@@ -4,6 +4,10 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Protos\echo.proto" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Google.Protobuf" Version="3.12.0" />
@@ -15,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Protobuf Include="Protos\echo.proto" />
     <Protobuf Include="Protos\weather.proto" />
     <Protobuf Include="Protos\greet.proto" />
   </ItemGroup>

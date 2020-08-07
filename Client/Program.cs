@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Grpc.Net.Client;
 using MyWeather;
 using Weather;
+using Echo;
 
 namespace Client
 {
@@ -28,6 +29,27 @@ namespace Client
             {
                 Console.WriteLine($"{data.Temperature}");
             }
+
+
+            var echoClient = new EchoService.EchoServiceClient(channel);
+            var response = echoClient.EchoMe(
+                new EchoRequest() 
+                { 
+                    Text = $"ABCDEFG-{DateTime.Now.ToShortDateString()}" 
+                });
+
+            Console.WriteLine($"[{response.Original}] => [{response.Result}]");
+
+
+            response = echoClient.ReverseEcho(
+                new EchoRequest()
+                {
+                    Text = $"ABCDEFG-{DateTime.Now.ToShortDateString()}"
+                });
+
+            Console.WriteLine($"[{response.Original}] => [{response.Result}]");
+
+
             Console.WriteLine("Press any key to exit...");
             Console.ReadKey();
         }

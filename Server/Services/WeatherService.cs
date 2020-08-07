@@ -1,10 +1,10 @@
+using Grpc.Core;
+using Microsoft.Extensions.Logging;
+using MyWeather;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Grpc.Core;
-using Microsoft.Extensions.Logging;
-using MyWeather;
 
 namespace Server
 {
@@ -51,5 +51,20 @@ namespace Server
             return Task.FromResult(reply);
         }
         
+    }
+
+    public static class StringExtensions
+    {
+        public static string Reverse(this string s)
+        {
+            if (s != null && s.Length > 0)
+            {
+                char[] charArray = s.ToCharArray();
+                Array.Reverse(charArray);
+                return new string(charArray);
+            }
+
+            return "";
+        }
     }
 }
