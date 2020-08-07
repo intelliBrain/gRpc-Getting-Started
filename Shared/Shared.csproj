@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <None Remove="Protos\echo.proto" />
+    <None Remove="Protos\org\xrpl\rpc\v1\rippled.proto" />
   </ItemGroup>
 
 
@@ -20,6 +21,7 @@
 
   <ItemGroup>
     <Protobuf Include="Protos\echo.proto" />
+    <Protobuf Include="Protos\org\xrpl\rpc\v1\rippled.proto" />
     <Protobuf Include="Protos\weather.proto" />
     <Protobuf Include="Protos\greet.proto" />
   </ItemGroup>

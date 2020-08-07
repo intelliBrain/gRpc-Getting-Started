@@ -1,0 +1,1574 @@
+syntax = "proto3";
+
+option csharp_namespace = "Rippled";
+
+package org.xrpl.rpc.v1;
+
+
+// RPCs available to interact with the XRP Ledger.
+// The gRPC API mimics the JSON API. Refer to xrpl.org for documentation
+service XRPLedgerAPIService {
+
+  // Get account info for an account on the XRP Ledger.
+  rpc GetAccountInfo (GetAccountInfoRequest) returns (GetAccountInfoResponse);
+
+  // Get the fee for a transaction on the XRP Ledger.
+  rpc GetFee (GetFeeRequest) returns (GetFeeResponse);
+
+  // Submit a signed transaction to the XRP Ledger.
+  rpc SubmitTransaction (SubmitTransactionRequest) returns (SubmitTransactionResponse);
+
+  // Get the status of a transaction
+  rpc GetTransaction (GetTransactionRequest) returns (GetTransactionResponse);
+
+  // Get all validated transactions associated with a given account
+  rpc GetAccountTransactionHistory (GetAccountTransactionHistoryRequest) returns (GetAccountTransactionHistoryResponse);
+}
+
+message AccountAddress
+{
+    // base58 encoding of an account
+    string address = 1;
+}
+
+message CurrencyAmount
+{
+    oneof amount
+    {
+        XRPDropsAmount xrp_amount = 1;
+        IssuedCurrencyAmount issued_currency_amount = 2;
+    }
+}
+
+message XRPDropsAmount
+{
+    uint64 drops = 1 [jstype=JS_STRING];
+}
+
+message IssuedCurrencyAmount
+{
+    // The currency used to value the amount.
+    Currency currency = 1;
+
+    // The value of the amount. 8 bytes
+    string value = 2;
+
+    // Unique account address of the entity issuing the currency.
+    AccountAddress issuer = 3;
+}
+
+message Currency
+{
+    // 3 character ASCII code
+    string name = 1;
+
+    // 160 bit currency code. 20 bytes
+    bytes code = 2;
+}
+
+message CancelAfter
+{
+    // time in seconds since Ripple epoch
+	uint32 value = 1;
+}
+
+message ClearFlag
+{
+    uint32 value = 1;
+}
+
+message CloseTime
+{
+    // time in seconds since Ripple epoch
+	uint32 value = 1;
+}
+
+message Date
+{
+    // time in seconds since Ripple epoch
+	uint32 value = 1;
+}
+
+message DestinationTag
+{
+    uint32 value = 1;
+}
+
+message Expiration
+{
+    // time in seconds since Ripple epoch
+	uint32 value = 1;
+}
+
+message FinishAfter
+{
+    // time in seconds since Ripple epoch
+	uint32 value = 1;
+}
+
+message Flags
+{
+    uint32 value = 1;
+}
+
+message HighQualityIn
+{
+    uint32 value = 1;
+}
+
+message HighQualityOut
+{
+    uint32 value = 1;
+}
+
+message FirstLedgerSequence
+{
+    uint32 value = 1;
+}
+
+message LastLedgerSequence
+{
+    uint32 value = 1;
+}
+
+message LowQualityIn
+{
+    uint32 value = 1;
+}
+
+message LowQualityOut
+{
+    uint32 value = 1;
+}
+
+message OfferSequence
+{
+    uint32 value = 1;
+}
+
+message OwnerCount
+{
+    uint32 value = 1;
+}
+
+message PreviousTransactionLedgerSequence
+{
+    uint32 value = 1;
+}
+
+message QualityIn
+{
+    uint32 value = 1;
+}
+
+message QualityOut
+{
+    uint32 value = 1;
+}
+
+message ReferenceFeeUnits
+{
+    uint32 value = 1;
+}
+
+message ReserveBase
+{
+    // in drops
+	uint32 value = 1;
+}
+
+message ReserveIncrement
+{
+    // in drops
+	uint32 value = 1;
+}
+
+message Sequence
+{
+    uint32 value = 1;
+}
+
+message SetFlag
+{
+    uint32 value = 1;
+}
+
+message SettleDelay
+{
+    uint32 value = 1;
+}
+
+message SignerListID
+{
+    uint32 value = 1;
+}
+
+message SignerQuorum
+{
+    uint32 value = 1;
+}
+
+message SignerWeight
+{
+    // is actually uint16
+	uint32 value = 1;
+}
+
+message SourceTag
+{
+    uint32 value = 1;
+}
+
+message TickSize
+{
+    // is actually uint8
+	uint32 value = 1;
+}
+
+message TransferRate
+{
+    uint32 value = 1;
+}
+
+
+// *** Messages wrapping uint64 ***
+
+message BaseFee
+{
+    // in drops
+    uint64 value = 1 [jstype=JS_STRING];
+}
+
+message BookNode
+{
+    uint64 value = 1 [jstype=JS_STRING];
+}
+
+message DestinationNode
+{
+    uint64 value = 1 [jstype=JS_STRING];
+}
+
+message HighNode
+{
+    uint64 value = 1 [jstype=JS_STRING];
+}
+
+message IndexNext
+{
+    uint64 value = 1 [jstype=JS_STRING];
+}
+
+message IndexPrevious
+{
+    uint64 value = 1 [jstype=JS_STRING];
+}
+
+message LowNode
+{
+    uint64 value = 1 [jstype=JS_STRING];
+}
+
+message OwnerNode
+{
+    uint64 value = 1 [jstype=JS_STRING];
+}
+
+
+// *** Messages wrapping 16 bytes ***
+
+message EmailHash
+{
+    bytes value = 1;
+}
+
+
+// *** Messages wrapping 20 bytes ***
+
+message TakerGetsIssuer
+{
+    // 20 bytes
+    bytes value = 1;
+}
+
+message TakerPaysIssuer
+{
+    // 20 bytes
+    bytes value = 1;
+}
+
+
+// *** Messages wrapping 32 bytes ***
+
+message AccountTransactionID
+{
+    // 32 bytes
+    bytes value = 1;
+}
+
+message BookDirectory
+{
+    // 32 btes
+    bytes value = 1;
+}
+
+message Channel
+{
+    // 32 bytes
+    bytes value = 1;
+}
+
+message CheckID
+{
+    // 32 bytes
+    bytes value = 1;
+}
+
+message Hash
+{
+    // 32 bytes
+    bytes value = 1;
+}
+
+message Index
+{
+    // 32 bytes
+    bytes value = 1;
+}
+
+message InvoiceID
+{
+    // 32 bytes
+    bytes value = 1;
+}
+
+message PreviousTransactionID
+{
+    // 32 bytes
+    bytes value = 1;
+}
+
+message RootIndex
+{
+    // 32 bytes
+    bytes value = 1;
+}
+
+
+// *** Messages wrapping variable length byte arrays ***
+
+message Condition
+{
+    bytes value = 1;
+}
+
+message Fulfillment
+{
+    bytes value = 1;
+}
+
+message MemoData
+{
+    bytes value = 1;
+}
+
+message MemoFormat
+{
+    bytes value = 1;
+}
+
+message MemoType
+{
+    bytes value = 1;
+}
+
+message MessageKey
+{
+    bytes value = 1;
+}
+
+message PublicKey
+{
+    bytes value = 1;
+}
+
+message PaymentChannelSignature
+{
+    bytes value = 1;
+}
+
+message SigningPublicKey
+{
+    bytes value = 1;
+}
+
+message TransactionSignature
+{
+    bytes value = 1;
+}
+
+message ValidatorToDisable
+{
+    bytes value = 1;
+}
+
+message ValidatorToReEnable
+{
+    bytes value = 1;
+}
+
+// *** Messages wrapping a Currency value ***
+
+message TakerGetsCurreny
+{
+    Currency value = 1;
+}
+
+message TakerPaysCurrency
+{
+    Currency value = 1;
+}
+
+
+// *** Messages wrapping a CurrencyAmount ***
+
+message Amount
+{
+    // Note, CurrencyAmount is a oneof, that can represent an XRP drops amount
+    // or an Issued Currency amount. However, in some transaction types/ledger
+    // objects, this value can only be in drops. For instance, the Amount field
+    // of a Payment transaction can be specified in XRP drops or an Issued
+    // Currency amount, but the Amount field of a PaymentChannelClaim
+    // transaction can only be an XRP drops amount.
+    CurrencyAmount value = 1;
+}
+
+message Balance
+{
+    CurrencyAmount value = 1;
+}
+
+message DeliverMin
+{
+    CurrencyAmount value = 1;
+}
+
+message DeliveredAmount
+{
+    CurrencyAmount value = 1;
+}
+
+message HighLimit
+{
+    CurrencyAmount value = 1;
+}
+
+message LimitAmount
+{
+    CurrencyAmount value = 1;
+}
+
+message LowLimit
+{
+    CurrencyAmount value = 1;
+}
+
+message SendMax
+{
+    CurrencyAmount value = 1;
+}
+
+message TakerGets
+{
+   CurrencyAmount value = 1;
+}
+
+message TakerPays
+{
+    CurrencyAmount value = 1;
+}
+
+
+// *** Messages wrapping an AccountAddress ***
+
+message Account
+{
+    AccountAddress value = 1;
+}
+
+message Authorize
+{
+    AccountAddress value = 1;
+}
+
+message Destination
+{
+    AccountAddress value = 1;
+}
+
+message Owner
+{
+    AccountAddress value = 1;
+}
+
+message RegularKey
+{
+    AccountAddress value = 1;
+}
+
+message Unauthorize
+{
+    AccountAddress value = 1;
+}
+
+
+// *** Messages wrapping a string ***
+
+message Domain
+{
+    string value = 1;
+}
+
+
+// *** Aggregate type messages
+
+// Next field: 3
+message SignerEntry
+{
+    Account account = 1;
+
+    SignerWeight signer_weight = 2;
+}
+
+// Next field: 3
+message DisabledValidator
+{
+    PublicKey public_key = 1;
+
+    FirstLedgerSequence ledger_sequence = 2;
+}
+
+// A request to get info about an account.
+// Next field: 6
+message GetAccountInfoRequest
+{
+    // The address to get info about.
+    AccountAddress account = 1;
+
+    bool strict = 2;
+
+    // Which ledger to use to retrieve data.
+    // If this field is not set, the server will use the open ledger.
+    // The open ledger includes data that is not validated or final.
+    // To retrieve the most up to date and validated data, use
+    // SHORTCUT_VALIDATED
+    LedgerSpecifier ledger = 3;
+
+    bool queue = 4;
+
+    bool signer_lists = 5;
+}
+
+// Response to GetAccountInfo RPC
+// Next field: 6
+message GetAccountInfoResponse
+{
+    AccountRoot account_data = 1;
+
+    SignerList signer_list = 2;
+
+    uint32 ledger_index = 3;
+
+    QueueData queue_data = 4;
+
+    bool validated = 5;
+}
+
+// Aggregate data about queued transactions
+// Next field: 7
+message QueueData
+{
+    uint32 txn_count = 1;
+
+    bool auth_change_queued = 2;
+
+    uint32 lowest_sequence = 3;
+
+    uint32 highest_sequence = 4;
+
+    XRPDropsAmount max_spend_drops_total = 5;
+
+    repeated QueuedTransaction transactions = 6;
+}
+
+// Data about a single queued transaction
+// Next field: 7
+message QueuedTransaction
+{
+    bool auth_change = 1;
+
+    XRPDropsAmount fee = 2;
+
+    uint64 fee_level = 3 [jstype=JS_STRING];
+
+    XRPDropsAmount max_spend_drops = 4;
+
+    Sequence sequence = 5;
+
+    LastLedgerSequence last_ledger_sequence = 6;
+}
+
+// Next field: 8
+message GetAccountTransactionHistoryRequest
+{
+    AccountAddress account = 1;
+
+    // What ledger to include results from. Specifying a not yet validated
+    // ledger results in an error. Not specifying a ledger uses the entire
+    // range of validated ledgers available to the server.
+    // Note, this parameter acts as a filter, and can only reduce the number of
+    // results. Specifying a single ledger will return only transactions from
+    // that ledger. This includes specifying a ledger with a Shortcut. For
+    // example, specifying SHORTCUT_VALIDATED will result in only transactions
+    // that were part of the most recently validated ledger being returned.
+    // Specifying a range of ledgers results in only transactions that were
+    // included in a ledger within the specified range being returned.
+    oneof ledger
+    {
+        LedgerSpecifier ledger_specifier = 2;
+        LedgerRange ledger_range = 3;
+    };
+
+    // Return results as binary blobs. Defaults to false.
+    bool binary = 4;
+
+    // If set to true, returns values indexed by older ledger first.
+    // Default to false.
+    bool forward = 5;
+
+    // Limit the number of results. Server may choose a lower limit.
+    // If this value is 0, the limit is ignored and the number of results
+    // returned is determined by the server
+    uint32 limit = 6;
+
+    // Marker to resume where previous request left off
+    // Used for pagination
+    Marker marker = 7;
+}
+
+
+// Next field: 8
+message GetAccountTransactionHistoryResponse
+{
+    AccountAddress account = 1;
+
+    uint32 ledger_index_min = 2;
+
+    uint32 ledger_index_max = 3;
+
+    uint32 limit = 4;
+
+    Marker marker = 5;
+
+    repeated GetTransactionResponse transactions = 6;
+
+    bool validated = 7;
+}
+
+// Next field: 3
+message Marker
+{
+    uint32 ledger_index = 1;
+
+    uint32 account_sequence = 2;
+}
+
+// A request for the current transaction fee on the ledger.
+// Next field: 1
+message GetFeeRequest
+{
+}
+
+// Response to a GetFee RPC
+// Next field: 8
+message GetFeeResponse
+{
+    uint64 current_ledger_size = 1 [jstype=JS_STRING];
+
+    uint64 current_queue_size = 2 [jstype=JS_STRING];
+
+    Fee fee = 3;
+
+    uint64 expected_ledger_size = 4 [jstype=JS_STRING];
+
+    uint32 ledger_current_index = 5;
+
+    FeeLevels levels = 6;
+
+    uint64 max_queue_size = 7 [jstype=JS_STRING];
+
+}
+
+// Next field: 5
+message Fee
+{
+    XRPDropsAmount base_fee = 1;
+
+    XRPDropsAmount median_fee = 2;
+
+    XRPDropsAmount minimum_fee = 3;
+
+    XRPDropsAmount open_ledger_fee = 4;
+}
+
+// Next field: 5
+message FeeLevels
+{
+    uint64 median_level = 1 [jstype=JS_STRING];
+
+    uint64 minimum_level = 2 [jstype=JS_STRING];
+
+    uint64 open_ledger_level = 3 [jstype=JS_STRING];
+
+    uint64 reference_level = 4 [jstype=JS_STRING];
+}
+
+// Next field: 4
+message GetTransactionRequest {
+
+    // hash of the transaction. 32 bytes
+    // ATTN: this is in binary, not hex. The JSON API accepts a hex string for
+    // a transaction hash, but here we need that hex string converted into its
+    // binary form. Each pair of hex characters should be converted into its
+    // corresponding byte. For example, the 4 character hex string "00FF"
+    // should be converted to a 2 byte array: [0, 255]
+    bytes hash = 1;
+
+    // if true, return data in binary format. defaults to false
+    bool binary = 2;
+
+    // If the transaction was not found, server will report whether the entire
+    // specified range was searched. The value is contained in the error message.
+    // The error message is of the form:
+    // "txn not found. searched_all = [true,false]"
+    // If the transaction was found, this parameter is ignored.
+    LedgerRange ledger_range = 3;
+}
+
+// Next field: 9
+message GetTransactionResponse {
+
+    oneof serialized_transaction {
+
+        Transaction transaction = 1;
+        // Variable length
+        bytes transaction_binary = 2;
+    };
+    // Sequence number of ledger that contains this transaction
+    uint32 ledger_index = 3;
+
+    // 32 bytes
+    bytes hash = 4;
+
+    // whether the ledger has been validated
+    bool validated = 5;
+
+    // metadata about the transaction
+    oneof serialized_meta {
+        Meta meta = 6;
+        // Variable length
+        bytes meta_binary = 7;
+    }
+
+    Date date = 8;
+}
+
+// Next field: 4
+message LedgerSpecifier
+{
+    // Next field: 4
+    enum Shortcut
+    {
+        SHORTCUT_UNSPECIFIED = 0;
+        SHORTCUT_VALIDATED   = 1;
+        SHORTCUT_CLOSED      = 2;
+        SHORTCUT_CURRENT     = 3;
+    }
+
+    oneof ledger
+    {
+        Shortcut shortcut = 1;
+        uint32 sequence = 2;
+        // 32 bytes
+        bytes hash = 3;
+    }
+}
+
+// Next field: 3
+message LedgerRange
+{
+    uint32 ledger_index_min = 1;
+
+    // Note, if ledger_index_min is non-zero and ledger_index_max is 0, the
+    // software will use the max validated ledger in place of ledger_index_max
+    uint32 ledger_index_max = 2;
+};
+
+// Next field: 14
+message LedgerObject
+{
+    oneof object
+    {
+        AccountRoot account_root = 1;
+        Amendments amendments = 2;
+        Check check = 3;
+        DepositPreauthObject deposit_preauth = 4;
+        DirectoryNode directory_node = 5;
+        Escrow escrow = 6;
+        FeeSettings fee_settings = 7;
+        LedgerHashes ledger_hashes = 8;
+        Offer offer = 9;
+        PayChannel pay_channel = 10;
+        RippleState ripple_state = 11;
+        SignerList signer_list = 12;
+        NegativeUNL negative_unl = 13;
+    }
+}
+
+// Next field: 14
+enum LedgerEntryType
+{
+    LEDGER_ENTRY_TYPE_UNSPECIFIED     = 0;
+    LEDGER_ENTRY_TYPE_ACCOUNT_ROOT    = 1;
+    LEDGER_ENTRY_TYPE_AMENDMENTS      = 2;
+    LEDGER_ENTRY_TYPE_CHECK           = 3;
+    LEDGER_ENTRY_TYPE_DEPOSIT_PREAUTH = 4;
+    LEDGER_ENTRY_TYPE_DIRECTORY_NODE  = 5;
+    LEDGER_ENTRY_TYPE_ESCROW          = 6;
+    LEDGER_ENTRY_TYPE_FEE_SETTINGS    = 7;
+    LEDGER_ENTRY_TYPE_LEDGER_HASHES   = 8;
+    LEDGER_ENTRY_TYPE_OFFER           = 9;
+    LEDGER_ENTRY_TYPE_PAY_CHANNEL     = 10;
+    LEDGER_ENTRY_TYPE_RIPPLE_STATE    = 11;
+    LEDGER_ENTRY_TYPE_SIGNER_LIST     = 12;
+    LEDGER_ENTRY_TYPE_NEGATIVE_UNL    = 13;
+}
+
+// Next field: 15
+message AccountRoot
+{
+    Account account = 1;
+
+    Balance balance = 2;
+
+    Sequence sequence = 3;
+
+    Flags flags = 4;
+
+    OwnerCount owner_count = 5;
+
+    PreviousTransactionID previous_transaction_id = 6;
+
+    PreviousTransactionLedgerSequence previous_transaction_ledger_sequence = 7;
+
+    AccountTransactionID account_transaction_id = 8;
+
+    Domain domain = 9;
+
+    EmailHash email_hash = 10;
+
+    MessageKey message_key = 11;
+
+    RegularKey regular_key = 12;
+
+    TickSize tick_size = 13;
+
+    TransferRate transfer_rate = 14;
+}
+
+// Next field: 4
+message Amendments
+{
+    // Next field: 2
+    message Amendment
+    {
+        // 32 bytes
+        bytes value = 1;
+    }
+
+    // Next field: 3
+    message Majority
+    {
+        Amendment amendment = 1;
+
+        CloseTime close_time = 2;
+    }
+
+    repeated Amendment amendments = 1;
+
+    repeated Majority majorities = 2;
+
+    Flags flags = 3;
+}
+
+// Next field: 14
+message Check
+{
+    Account account = 1;
+
+    Destination destination = 2;
+
+    Flags flags = 3;
+
+    OwnerNode owner_node = 4;
+
+    PreviousTransactionID previous_transaction_id = 5;
+
+    PreviousTransactionLedgerSequence previous_transaction_ledger_sequence = 6;
+
+    SendMax send_max = 7;
+
+    Sequence sequence = 8;
+
+    DestinationNode destination_node = 9;
+
+    DestinationTag destination_tag = 10;
+
+    Expiration expiration = 11;
+
+    InvoiceID invoice_id = 12;
+
+    SourceTag source_tag = 13;
+}
+
+// Next field: 7
+message DepositPreauthObject
+{
+    Account account = 1;
+
+    Authorize authorize = 2;
+
+    Flags flags = 3;
+
+    OwnerNode owner_node = 4;
+
+    PreviousTransactionID previous_transaction_id = 5;
+
+    PreviousTransactionLedgerSequence previous_transaction_ledger_sequence = 6;
+}
+
+// Next field: 11
+message DirectoryNode
+{
+    Flags flags = 1;
+
+    RootIndex root_index = 2;
+
+    repeated Index indexes = 3;
+
+    IndexNext index_next = 4;
+
+    IndexPrevious index_previous = 5;
+
+    Owner owner = 6;
+
+    TakerPaysCurrency taker_pays_currency = 7;
+
+    TakerPaysIssuer taker_pays_issuer = 8;
+
+    TakerGetsCurreny taker_gets_currency = 9;
+
+    TakerGetsIssuer taker_gets_issuer = 10;
+}
+
+// Next field: 14
+message Escrow
+{
+    Account account = 1;
+
+    Destination destination = 2;
+
+    Amount amount = 3;
+
+    Condition condition = 4;
+
+    CancelAfter cancel_after = 5;
+
+    FinishAfter finish_after = 6;
+
+    Flags flags = 7;
+
+    SourceTag source_tag = 8;
+
+    DestinationTag destination_tag = 9;
+
+    OwnerNode owner_node = 10;
+
+    DestinationNode destination_node = 11;
+
+    PreviousTransactionID previous_transaction_id = 12;
+
+    PreviousTransactionLedgerSequence previous_transaction_ledger_sequence = 13;
+}
+
+// Next field: 6
+message FeeSettings
+{
+    BaseFee base_fee = 1;
+
+    ReferenceFeeUnits reference_fee_units = 2;
+
+    ReserveBase reserve_base = 3;
+
+    ReserveIncrement reserve_increment = 4;
+
+    Flags flags = 5;
+}
+
+// Next field: 4
+message LedgerHashes
+{
+    LastLedgerSequence last_ledger_sequence = 1;
+
+    repeated Hash hashes = 2;
+
+    Flags flags = 3;
+}
+
+// Next field: 12
+message Offer
+{
+    Account account = 1;
+
+    Sequence sequence = 2;
+
+    Flags flags = 3;
+
+    TakerPays taker_pays = 4;
+
+    TakerGets taker_gets = 5;
+
+    BookDirectory book_directory = 6;
+
+    BookNode book_node = 7;
+
+    OwnerNode owner_node = 8;
+
+    Expiration expiration = 9;
+
+    PreviousTransactionID previous_transaction_id = 10;
+
+    PreviousTransactionLedgerSequence previous_transaction_ledger_sequence = 11;
+}
+
+// Next field: 13
+message PayChannel
+{
+    Account account = 1;
+
+    Destination destination = 2;
+
+    Amount amount = 3;
+
+    Balance balance = 4;
+
+    PublicKey public_key = 5;
+
+    SettleDelay settle_delay = 6;
+
+    OwnerNode owner_node = 7;
+
+    PreviousTransactionID previous_transaction_id = 8;
+
+    PreviousTransactionLedgerSequence previous_transaction_ledger_sequence = 9;
+
+    Flags flags = 10;
+
+    Expiration expiration = 11;
+
+    CancelAfter cancel_after = 12;
+
+    SourceTag source_tag = 13;
+
+    DestinationTag destination_tag = 14;
+
+}
+
+// Next field: 13
+message RippleState
+{
+    Balance balance = 1;
+
+    Flags flags = 2;
+
+    LowLimit low_limit = 3;
+
+    HighLimit high_limit = 4;
+
+    LowNode low_node = 5;
+
+    HighNode high_node = 6;
+
+    LowQualityIn low_quality_in = 7;
+
+    LowQualityOut low_quality_out = 8;
+
+    HighQualityIn high_quality_in = 9;
+
+    HighQualityOut high_quality_out = 10;
+
+    PreviousTransactionID previous_transaction_id = 11;
+
+    PreviousTransactionLedgerSequence previous_transaction_ledger_sequence = 12;
+}
+
+// Next field: 8
+message SignerList
+{
+    Flags flags = 1;
+
+    PreviousTransactionID previous_transaction_id = 2;
+
+    PreviousTransactionLedgerSequence previous_transaction_ledger_sequence = 3;
+
+    OwnerNode owner_node = 4;
+
+    repeated SignerEntry signer_entries = 5;
+
+    SignerListID signer_list_id = 6;
+
+    SignerQuorum signer_quorum = 7;
+}
+
+// Next field: 5
+message NegativeUNL
+{
+    repeated DisabledValidator disabled_validators = 1;
+
+    ValidatorToDisable validator_to_disable = 2;
+
+    ValidatorToReEnable validator_to_re_enable = 3;
+
+    Flags flags = 4;
+}
+
+// Next field: 5
+message Meta
+{
+    // index in ledger
+    uint64 transaction_index = 1 [jstype=JS_STRING];
+
+    // result code indicating whether the transaction succeeded or failed
+    TransactionResult transaction_result = 2;
+
+   repeated AffectedNode affected_nodes = 3;
+
+   DeliveredAmount delivered_amount = 4;
+}
+
+// Next field: 3
+message TransactionResult
+{
+    // Next field: 7
+    enum ResultType
+    {
+        RESULT_TYPE_UNSPECIFIED = 0;
+        // Claimed cost only
+        RESULT_TYPE_TEC         = 1;
+        // Failure
+        RESULT_TYPE_TEF         = 2;
+        // Local error
+        RESULT_TYPE_TEL         = 3;
+        // Malformed transaction
+        RESULT_TYPE_TEM         = 4;
+        // Retry
+        RESULT_TYPE_TER         = 5;
+        // Success
+        RESULT_TYPE_TES         = 6;
+    }
+
+    // category of the transaction result
+    ResultType result_type = 1;
+
+    // full result string, i.e. tesSUCCESS
+    string result = 2;
+}
+
+// Next field: 6
+message AffectedNode
+{
+    LedgerEntryType ledger_entry_type = 1;
+
+    // 32 bytes
+    bytes ledger_index = 2;
+
+    oneof node
+    {
+        CreatedNode created_node = 3;
+        DeletedNode deleted_node = 4;
+        ModifiedNode modified_node = 5;
+    }
+}
+
+// Next field: 2
+message CreatedNode
+{
+    LedgerObject new_fields = 1;
+}
+
+// Next field: 2
+message DeletedNode
+{
+    LedgerObject final_fields = 1;
+}
+
+// Next field: 5
+message ModifiedNode {
+
+    LedgerObject final_fields = 1;
+
+    LedgerObject previous_fields = 2;
+
+    PreviousTransactionID previous_transaction_id = 3;
+
+    PreviousTransactionLedgerSequence previous_transaction_ledger_sequence = 4;
+}
+
+// A request to submit the signed transaction to the ledger.
+// Next field: 3
+message SubmitTransactionRequest
+{
+    // The signed transaction to submit.
+    bytes signed_transaction = 1;
+
+    bool fail_hard = 2;
+}
+
+// A response when a signed transaction is submitted to the ledger.
+// Next field: 5
+message SubmitTransactionResponse
+{
+    // Code indicating the preliminary result of the transaction.
+    TransactionResult engine_result = 1;
+
+    // Numeric code indicating the preliminary result of the transaction,
+    // directly correlated to engine_result.
+    int64 engine_result_code = 2;
+
+    // Human-readable explanation of the transaction's preliminary result.
+    string engine_result_message = 3;
+
+    // 32 bytes
+    bytes hash = 4;
+}
+
+// A message encompassing all transaction types
+// Next field: 30
+message Transaction
+{
+    Account account = 1;
+
+    XRPDropsAmount fee = 2;
+
+    Sequence sequence = 3;
+
+    // Data specific to the type of transaction
+    oneof transaction_data
+    {
+        Payment payment = 4;
+
+        AccountSet account_set = 13;
+
+        AccountDelete account_delete = 14;
+
+        CheckCancel check_cancel = 15;
+
+        CheckCash check_cash = 16;
+
+        CheckCreate check_create = 17;
+
+        DepositPreauth deposit_preauth = 18;
+
+        EscrowCancel escrow_cancel = 19;
+
+        EscrowCreate escrow_create = 20;
+
+        EscrowFinish escrow_finish = 21;
+
+        OfferCancel offer_cancel = 22;
+
+        OfferCreate offer_create = 23;
+
+        PaymentChannelClaim payment_channel_claim = 24;
+
+        PaymentChannelCreate payment_channel_create= 25;
+
+        PaymentChannelFund payment_channel_fund = 26;
+
+        SetRegularKey set_regular_key = 27;
+
+        SignerListSet signer_list_set = 28;
+
+        TrustSet trust_set = 29;
+
+    }
+
+    SigningPublicKey signing_public_key = 5;
+
+    TransactionSignature transaction_signature = 6;
+
+    Flags flags = 7;
+
+    LastLedgerSequence last_ledger_sequence = 8;
+
+    SourceTag source_tag = 9;
+
+    repeated Memo memos = 10;
+
+    repeated Signer signers = 11;
+
+    AccountTransactionID account_transaction_id = 12;
+}
+
+// Next field: 4
+message Memo
+{
+    MemoData memo_data = 1;
+
+    MemoFormat memo_format = 2;
+
+    MemoType memo_type = 3;
+}
+
+// Next field: 4
+message Signer
+{
+    Account account = 1;
+
+    TransactionSignature transaction_signature = 2;
+
+    SigningPublicKey signing_public_key = 3;
+}
+
+// Next field: 8
+message AccountSet
+{
+    ClearFlag clear_flag = 1;
+
+    Domain domain = 2;
+
+    EmailHash email_hash = 3;
+
+    MessageKey message_key = 4;
+
+    SetFlag set_flag = 5;
+
+    TransferRate transfer_rate = 6;
+
+    TickSize tick_size = 7;
+}
+
+// Next field: 3
+message AccountDelete
+{
+   Destination destination = 1;
+
+   DestinationTag destination_tag = 2;
+}
+
+// Next field: 2
+message CheckCancel
+{
+    CheckID check_id = 1;
+}
+
+// Next field: 4
+message CheckCash
+{
+    CheckID check_id = 1;
+
+    oneof amount_oneof
+    {
+        Amount amount = 2;
+
+        DeliverMin deliver_min = 3;
+    }
+}
+
+// Next field: 6
+message CheckCreate
+{
+    Destination destination = 1;
+
+    SendMax send_max = 2;
+
+    DestinationTag destination_tag = 3;
+
+    Expiration expiration = 4;
+
+    InvoiceID invoice_id = 5;
+}
+
+// Next field: 3
+message DepositPreauth
+{
+    oneof authorization_oneof
+    {
+        Authorize authorize = 1;
+
+        Unauthorize unauthorize = 2;
+    }
+}
+
+// Next field: 3
+message EscrowCancel
+{
+    Owner owner = 1;
+
+    OfferSequence offer_sequence = 2;
+}
+
+// Next field: 7
+message EscrowCreate
+{
+    Amount amount = 1;
+
+    Destination destination = 2;
+
+    CancelAfter cancel_after = 3;
+
+    FinishAfter finish_after = 4;
+
+    Condition condition = 5;
+
+    DestinationTag destination_tag = 6;
+}
+
+// Next field: 5
+message EscrowFinish
+{
+    Owner owner = 1;
+
+    OfferSequence offer_sequence = 2;
+
+    Condition condition = 3;
+
+    Fulfillment fulfillment = 4;
+}
+
+// Next field: 2
+message OfferCancel
+{
+   OfferSequence offer_sequence = 1;
+}
+
+// Next field: 5
+message OfferCreate
+{
+    Expiration expiration = 1;
+
+    OfferSequence offer_sequence = 2;
+
+    TakerGets taker_gets = 3;
+
+    TakerPays taker_pays = 4;
+}
+
+// Next field: 8
+message Payment
+{
+    // Next field: 4
+    message PathElement
+    {
+        AccountAddress account = 1;
+
+        Currency currency = 2;
+
+        AccountAddress issuer = 3;
+    }
+
+    // Next field: 2
+    message Path
+    {
+        repeated PathElement elements = 1;
+    }
+
+    Amount amount = 1;
+
+    Destination destination = 2;
+
+    DestinationTag destination_tag = 3;
+
+    InvoiceID invoice_id = 4;
+
+    repeated Path paths = 5;
+
+    SendMax send_max = 6;
+
+    DeliverMin deliver_min = 7;
+}
+
+// Next field: 6
+message PaymentChannelClaim
+{
+    Channel channel = 1;
+
+    Balance balance = 2;
+
+    Amount amount = 3;
+
+    PaymentChannelSignature payment_channel_signature = 4;
+
+    PublicKey public_key = 5;
+}
+
+// Next field: 7
+message PaymentChannelCreate
+{
+    Amount amount = 1;
+
+    Destination destination = 2;
+
+    SettleDelay settle_delay = 3;
+
+    PublicKey public_key = 4;
+
+    CancelAfter cancel_after = 5;
+
+    DestinationTag destination_tag = 6;
+}
+
+// Next field: 4
+message PaymentChannelFund
+{
+    Channel channel = 1;
+
+    Amount amount = 2;
+
+    Expiration expiration = 3;
+}
+
+// Next field: 2
+message SetRegularKey
+{
+    RegularKey regular_key = 1;
+}
+
+// Next field: 3
+message SignerListSet
+{
+   SignerQuorum signer_quorum = 1;
+
+   repeated SignerEntry signer_entries = 2;
+}
+
+// Next field: 4
+message TrustSet
+{
+    LimitAmount limit_amount = 1;
+
+    QualityIn quality_in = 2;
+
+    QualityOut quality_out = 3;
+}
+
